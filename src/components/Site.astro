@@ -1,0 +1,356 @@
+---
+import { ui } from '../i18n/ui.js';
+const { lang } = Astro.props;
+const t = ui[lang];
+const stats = {
+  en: {
+    proof: [
+      { count: 15, suffix: ' yrs', label: t['proof.l1'] },
+      { count: 50, prefix: '$', suffix: 'M+', label: t['proof.l2'] },
+      { count: 300, prefix: '$', suffix: 'M+', label: t['proof.l3'] },
+      { count: 30, suffix: '+', label: t['proof.l4'] },
+    ],
+    market: { count: 5.5, decimals: 1, prefix: '$', suffix: 'B' },
+  },
+  es: {
+    proof: [
+      { count: 15, suffix: ' años', label: t['proof.l1'] },
+      { count: 50, lead: 'Más de ', prefix: '$', suffix: 'M', label: t['proof.l2'] },
+      { count: 300, lead: 'Más de ', prefix: '$', suffix: 'M', label: t['proof.l3'] },
+      { count: 30, lead: 'Más de ', suffix: ' países', label: t['proof.l4'] },
+    ],
+    market: { count: 5.5, decimals: 1, prefix: '$', suffix: ' mil millones' },
+  },
+}[lang];
+const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
+---
+<header>
+  <div class="wrap navbar">
+    <a class="brand" href="/"><span class="dot"></span>Embrace <small>Ecuador</small></a>
+    <div class="nav-right">
+      <nav class="links">
+        <a href="#services" set:html={t['nav.services']}></a>
+        <a href="#opportunity" set:html={t['nav.whynow']}></a>
+        <a href="#model" set:html={t['nav.model']}></a>
+        <a href="#who" set:html={t['nav.who']}></a>
+        <a href="#process" set:html={t['nav.process']}></a>
+        <a class="btn btn-primary nav-cta" href="#contact" set:html={t['nav.cta']}></a>
+      </nav>
+      <div class="lang" role="group" aria-label="Language">
+        <a class={'lang-btn' + (lang === 'en' ? ' active' : '')} href="/">EN</a>
+        <a class={'lang-btn' + (lang === 'es' ? ' active' : '')} href="/es/">ES</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="eyebrow hero-eyebrow reveal" set:html={t['hero.eyebrow']}></p>
+    <h1 class="reveal" set:html={t['hero.h1']}></h1>
+    <p class="lead reveal" set:html={t['hero.lead']}></p>
+    <div class="hero-cta reveal">
+      <a class="btn btn-primary" href="#contact"><span set:html={t['hero.cta1']}></span> <span class="arw">→</span></a>
+      <a class="btn btn-ghost-dark" href="#services" set:html={t['hero.cta2']}></a>
+    </div>
+    <div class="proof-strip">
+      {stats.proof.map((s) => (
+        <div class="cell reveal">
+          <div class="proof-num" data-count={s.count} data-decimals={s.decimals || 0} data-lead={s.lead || ''} data-prefix={s.prefix || ''} data-suffix={s.suffix || ''}><span>0</span></div>
+          <div class="proof-label" set:html={s.label}></div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow" set:html={t['wwd.eyebrow']}></p>
+      <h2 set:html={t['wwd.h2']}></h2>
+      <p class="lead" set:html={t['wwd.lead']}></p>
+    </div>
+    <div class="offers">
+      <div class="offer reveal">
+        <span class="tag"><i></i><span set:html={t['off1.tag']}></span></span>
+        <h3 set:html={t['off1.h3']}></h3>
+        <p class="sub" set:html={t['off1.sub']}></p>
+        <p set:html={t['off1.p']}></p>
+        <div class="spacer"></div>
+        <div class="offer-cta"><a class="g" href="#contact" set:html={t['off1.cta']}></a></div>
+      </div>
+      <div class="offer blue reveal">
+        <span class="tag"><i></i><span set:html={t['off2.tag']}></span></span>
+        <h3 set:html={t['off2.h3']}></h3>
+        <p class="sub" set:html={t['off2.sub']}></p>
+        <p set:html={t['off2.p']}></p>
+        <div class="spacer"></div>
+        <div class="offer-cta"><a class="g" href="#contact" set:html={t['off2.cta']}></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why" id="opportunity">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow" set:html={t['why.eyebrow']}></p>
+      <h2 set:html={t['why.h2']}></h2>
+    </div>
+    <div class="stat-row">
+      <div class="stat reveal">
+        <div class="n" data-count={stats.market.count} data-decimals={stats.market.decimals || 0} data-prefix={stats.market.prefix || ''} data-suffix={stats.market.suffix || ''}><span>0</span></div>
+        <div class="d" set:html={t['why.d1']}></div>
+      </div>
+      <div class="stat reveal">
+        <div class="n" data-count={22} data-suffix="%"><span>0</span></div>
+        <div class="d" set:html={t['why.d2']}></div>
+      </div>
+      <div class="stat reveal">
+        <div class="n" data-count={94} data-suffix="%"><span>0</span></div>
+        <div class="d" set:html={t['why.d3']}></div>
+      </div>
+    </div>
+    <div class="gap-note reveal">
+      <span class="lbl" set:html={t['why.gaplbl']}></span>
+      <p set:html={t['why.gapp']}></p>
+    </div>
+  </div>
+</section>
+
+<section class="model" id="model">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow" set:html={t['model.eyebrow']}></p>
+      <h2 set:html={t['model.h2']}></h2>
+      <p class="lead" set:html={t['model.lead']}></p>
+    </div>
+    <div class="model-diagram">
+      <div class="mcard usual reveal">
+        <div class="mtitle"><span class="k" set:html={t['model.c1k']}></span></div>
+        <h3 set:html={t['model.c1h']}></h3>
+        <p class="mdesc" set:html={t['model.c1d']}></p>
+        <div class="stage">
+          <div class="outside">
+            <div class="ext" set:html={t['model.c1ext']}></div>
+            <div class="conn" aria-hidden="true"></div>
+            <div class="org" style="flex:1;min-height:auto;padding:18px">
+              <span class="orglbl" set:html={t['model.orglbl']}></span>
+              <span class="node client" style="margin-top:14px" set:html={t['model.internal']}></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mcard good reveal">
+        <div class="mtitle"><span class="k" set:html={t['model.c2k']}></span></div>
+        <h3 set:html={t['model.c2h']}></h3>
+        <p class="mdesc" set:html={t['model.c2d']}></p>
+        <div class="stage">
+          <div class="org">
+            <span class="orglbl" set:html={t['model.orglbl2']}></span>
+            <span class="node client" set:html={t['model.internal2']}></span>
+            <span class="node op"><i></i><span set:html={t['model.op1']}></span></span>
+            <span class="node op"><i></i><span set:html={t['model.op2']}></span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow" set:html={t['proc.eyebrow']}></p>
+      <h2 set:html={t['proc.h2']}></h2>
+    </div>
+    <div class="steps">
+      {steps.map((num, i) => (
+        <div class="step reveal">
+          <div class="num">{num}</div>
+          <h3 set:html={t['proc.s' + (i + 1) + 'h']}></h3>
+          <p set:html={t['proc.s' + (i + 1) + 'p']}></p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="who" id="who">
+  <div class="wrap who-grid">
+    <div class="reveal">
+      <p class="eyebrow" set:html={t['who.eyebrow']}></p>
+      <h2 set:html={t['who.h2']}></h2>
+      <p set:html={t['who.p1']}></p>
+      <p set:html={t['who.p2']}></p>
+      <p class="pquote" set:html={t['who.quote']}></p>
+      <p set:html={t['who.p3']}></p>
+      <div class="sig">Jay Vintimilla<small set:html={t['who.sigrole']}></small></div>
+    </div>
+    <div class="reveal">
+      <div class="cred-list">
+        <div class="row"><span class="v" set:html={t['cred.v1']}></span><span class="l" set:html={t['cred.l1']}></span></div>
+        <div class="row"><span class="v" set:html={t['cred.v2']}></span><span class="l" set:html={t['cred.l2']}></span></div>
+        <div class="row"><span class="v" set:html={t['cred.v3']}></span><span class="l" set:html={t['cred.l3']}></span></div>
+        <div class="row"><span class="v" set:html={t['cred.v4']}></span><span class="l" set:html={t['cred.l4']}></span></div>
+        <div class="row"><span class="v" set:html={t['cred.v5']}></span><span class="l" set:html={t['cred.l5']}></span></div>
+      </div>
+      <div class="brands">
+        <p class="cap" set:html={t['brands.cap']}></p>
+        <div class="marks">
+          <span>Revlon</span><span>Starbucks</span><span>PepsiCo</span><span>Kate&nbsp;Spade</span><span>Lenox</span><span>Pyrex</span><span>bareMinerals</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="selector" id="selector">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow" set:html={t['sel.eyebrow']}></p>
+      <h2 set:html={t['sel.h2']}></h2>
+      <p class="lead" set:html={t['sel.lead']}></p>
+    </div>
+    <div class="sel-toggle reveal">
+      <button class="sel-opt" data-target="growth" aria-pressed="false">
+        <div class="q" set:html={t['sel.o1q']}></div>
+        <div class="h" set:html={t['sel.o1h']}></div>
+      </button>
+      <button class="sel-opt blue" data-target="savings" aria-pressed="false">
+        <div class="q" set:html={t['sel.o2q']}></div>
+        <div class="h" set:html={t['sel.o2h']}></div>
+      </button>
+    </div>
+    <div class="sel-result" id="sel-result" role="status" aria-live="polite">
+      <div class="rlbl" id="res-lbl">—</div>
+      <h3 id="res-title">—</h3>
+      <p id="res-desc">—</p>
+      <a class="btn btn-primary" id="res-cta" href="#contact"><span set:html={t['sel.cta']}></span> →</a>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow" set:html={t['contact.eyebrow']}></p>
+      <h2 set:html={t['contact.h2']}></h2>
+      <p class="lead" set:html={t['contact.lead']}></p>
+    </div>
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="path">
+          <span class="pk"><i></i><span set:html={t['path1.pk']}></span></span>
+          <h3 set:html={t['path1.h3']}></h3>
+          <p set:html={t['path1.p']}></p>
+        </div>
+        <div class="path blue">
+          <span class="pk"><i></i><span set:html={t['path2.pk']}></span></span>
+          <h3 set:html={t['path2.h3']}></h3>
+          <p set:html={t['path2.p']}></p>
+        </div>
+      </div>
+      <div class="reveal">
+        <form class="lead-form" onsubmit="return false;">
+          <div class="two">
+            <div class="field"><label for="name" set:html={t['form.name']}></label><input id="name" type="text" placeholder={t['form.ph.name']} /></div>
+            <div class="field"><label for="company" set:html={t['form.company']}></label><input id="company" type="text" placeholder={t['form.ph.company']} /></div>
+          </div>
+          <div class="two">
+            <div class="field"><label for="email" set:html={t['form.email']}></label><input id="email" type="email" placeholder={t['form.ph.email']} /></div>
+            <div class="field">
+              <label for="audit" set:html={t['form.audit']}></label>
+              <select id="audit">
+                <option set:html={t['form.opt1']}></option>
+                <option set:html={t['form.opt2']}></option>
+                <option set:html={t['form.opt3']}></option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label for="msg" set:html={t['form.msg']}></label><textarea id="msg" rows="3" placeholder={t['form.ph.msg']}></textarea></div>
+          <button class="btn btn-primary" type="submit" style="justify-content:center"><span set:html={t['form.submit']}></span> <span class="arw">→</span></button>
+          <p class="form-note" set:html={t['form.note']}></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand"><span class="dot"></span>Embrace Ecuador</div>
+        <p class="foot-tag" set:html={t['foot.tag']}></p>
+      </div>
+      <div class="foot-cols">
+        <div class="col">
+          <h4 set:html={t['foot.c1h']}></h4>
+          <a href="#services" set:html={t['foot.c1a']}></a>
+          <a href="#services" set:html={t['foot.c1b']}></a>
+          <a href="#model" set:html={t['foot.c1c']}></a>
+        </div>
+        <div class="col">
+          <h4 set:html={t['foot.c2h']}></h4>
+          <a href="#who" set:html={t['foot.c2a']}></a>
+          <a href="#process" set:html={t['foot.c2b']}></a>
+          <a href="#opportunity" set:html={t['foot.c2c']}></a>
+        </div>
+        <div class="col">
+          <h4 set:html={t['foot.c3h']}></h4>
+          <a href="#contact" set:html={t['foot.c3a']}></a>
+          <a href="#contact" set:html={t['foot.c3b']}></a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span set:html={t['foot.copy']}></span>
+      <span>Quito · Guayaquil · Ecuador</span>
+    </div>
+  </div>
+</footer>
+
+<script define:vars={{ locale: lang, sel: { rec: t['sel.rec'], growth: { title: t['sel.growth.title'], desc: t['sel.growth.desc'] }, savings: { title: t['sel.savings.title'], desc: t['sel.savings.desc'] } } }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fmt = (v, d) => new Intl.NumberFormat(locale === 'es' ? 'es-EC' : 'en-US', { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
+    const paint = (el, val) => {
+      const p = el.dataset;
+      el.innerHTML = (p.lead ? '<span class="lead-in">' + p.lead + '</span>' : '') + (p.prefix ? '<span class="pre">' + p.prefix + '</span>' : '') + '<span class="val">' + val + '</span>' + (p.suffix ? '<span class="suf">' + p.suffix + '</span>' : '');
+    };
+    const animate = (el) => {
+      const target = parseFloat(el.dataset.count), dec = parseInt(el.dataset.decimals || '0', 10), dur = 1400, start = performance.now();
+      (function loop(now) {
+        let t = Math.min((now - start) / dur, 1); t = 1 - Math.pow(1 - t, 3);
+        paint(el, fmt(target * t, dec));
+        if (t < 1) requestAnimationFrame(loop); else paint(el, fmt(target, dec));
+      })(performance.now());
+    };
+    const counters = document.querySelectorAll('[data-count]');
+    const reveals = document.querySelectorAll('.reveal');
+    if (reduce) {
+      reveals.forEach(e => e.classList.add('in'));
+      counters.forEach(el => paint(el, fmt(parseFloat(el.dataset.count), parseInt(el.dataset.decimals || '0', 10))));
+    } else {
+      const ro = new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); o.unobserve(e.target); } }), { threshold: .14, rootMargin: '0px 0px -8% 0px' });
+      reveals.forEach(e => ro.observe(e));
+      const co = new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { animate(e.target); o.unobserve(e.target); } }), { threshold: .5 });
+      counters.forEach(el => co.observe(el));
+    }
+    const box = document.getElementById('sel-result');
+    const show = (target) => {
+      document.getElementById('res-lbl').textContent = sel.rec;
+      document.getElementById('res-title').textContent = sel[target].title;
+      document.getElementById('res-desc').textContent = sel[target].desc;
+      box.classList.toggle('blue', target === 'savings');
+      box.classList.add('show');
+    };
+    document.querySelectorAll('.sel-opt').forEach(b => b.addEventListener('click', () => {
+      document.querySelectorAll('.sel-opt').forEach(x => { x.classList.remove('active'); x.setAttribute('aria-pressed', 'false'); });
+      b.classList.add('active'); b.setAttribute('aria-pressed', 'true'); show(b.dataset.target);
+    }));
+  });
+</script>

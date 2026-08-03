@@ -1,0 +1,9 @@
+---
+import Base from '../../layouts/Base.astro';
+import Site from '../../components/Site.astro';
+import { ui } from '../../i18n/ui.js';
+const lang = 'es';
+---
+<Base lang={lang} title={ui[lang]['doc.title']} description="Embrace integra operadores de ecommerce capacitados dentro de tu organización: estrategia, sistemas y responsabilidad sobre las ventas online en Ecuador.">
+  <Site lang={lang} />
+</Base>

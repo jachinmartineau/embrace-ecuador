@@ -1,0 +1,195 @@
+---
+import { auditUi } from '../i18n/audit.js';
+import { SHEET_ENDPOINT, FALLBACK_EMAIL } from '../config.js';
+const { lang, otherHref } = Astro.props;
+const t = auditUi[lang];
+const flowA = {
+  q1: { name: 'channels', label: t['a.q1'], options: [t['a.q1.o1'], t['a.q1.o2'], t['a.q1.o3'], t['a.q1.o4']] },
+  q2: { name: 'monthly_volume', label: t['a.q2'], options: [t['a.q2.o1'], t['a.q2.o2'], t['a.q2.o3'], t['a.q2.o4']] },
+};
+const flowB = {
+  q1: { name: 'num_agencies', label: t['b.q1'], options: [t['b.q1.o1'], t['b.q1.o2'], t['b.q1.o3']] },
+  q2: { name: 'monthly_spend', label: t['b.q2'], options: [t['b.q2.o1'], t['b.q2.o2'], t['b.q2.o3']] },
+};
+---
+<main class="aud">
+  <header class="aud-head">
+    <a class="brand" href="/"><span class="dot"></span>Embrace <small>Ecuador</small></a>
+    <a class="lang-link" href={otherHref}>{t['otherLang']}</a>
+  </header>
+
+  <div class="aud-wrap">
+    <p class="eyebrow aud-eyebrow">{t['eyebrow']}</p>
+    <p class="aud-intro">{t['intro']}</p>
+
+    <section class="aud-step" data-step="1">
+      <h1 class="aud-h1">{t['s1.heading']}</h1>
+      <div class="path-choices">
+        <button type="button" class="path-choice" data-path="a">
+          <span class="pc-title">{t['s1.a.title']}</span>
+          <span class="pc-sub">{t['s1.a.sub']}</span>
+          <span class="pc-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="path-choice blue" data-path="b">
+          <span class="pc-title">{t['s1.b.title']}</span>
+          <span class="pc-sub">{t['s1.b.sub']}</span>
+          <span class="pc-arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="aud-step" data-step="2" hidden>
+      <button type="button" class="back-btn" data-back>{t['back']}</button>
+
+      <form class="aud-form" data-flow="a" data-audit="Founder" novalidate hidden>
+        <h2 class="flow-title">{t['a.title']}</h2>
+        <div class="hp" aria-hidden="true"><label>Leave this field empty<input type="text" name="company_url" tabindex="-1" autocomplete="off" /></label></div>
+        <div class="field"><label for="a-name">{t['f.name']}</label><input id="a-name" type="text" name="name" required /></div>
+        <div class="field"><label for="a-company">{t['f.company']}</label><input id="a-company" type="text" name="company" required /></div>
+        <div class="field"><label for="a-email">{t['f.email']}</label><input id="a-email" type="email" name="email" required /></div>
+        <fieldset class="radios">
+          <legend>{flowA.q1.label}</legend>
+          {flowA.q1.options.map((o, i) => (
+            <label class="radio"><input type="radio" name={flowA.q1.name} value={o} required={i === 0} /><span>{o}</span></label>
+          ))}
+        </fieldset>
+        <fieldset class="radios">
+          <legend>{flowA.q2.label}</legend>
+          {flowA.q2.options.map((o, i) => (
+            <label class="radio"><input type="radio" name={flowA.q2.name} value={o} required={i === 0} /><span>{o}</span></label>
+          ))}
+        </fieldset>
+        <div class="field"><label for="a-msg">{t['a.q3']}</label><textarea id="a-msg" name="message" rows="3" placeholder={t['f.open.ph']} required></textarea></div>
+        <button class="btn btn-primary aud-submit" type="submit"><span class="lbl">{t['a.cta']}</span> <span class="arw">→</span></button>
+        <p class="form-err" role="alert" hidden></p>
+      </form>
+
+      <form class="aud-form" data-flow="b" data-audit="Qualifying" novalidate hidden>
+        <h2 class="flow-title">{t['b.title']}</h2>
+        <div class="hp" aria-hidden="true"><label>Leave this field empty<input type="text" name="company_url" tabindex="-1" autocomplete="off" /></label></div>
+        <div class="field"><label for="b-name">{t['f.name']}</label><input id="b-name" type="text" name="name" required /></div>
+        <div class="field"><label for="b-company">{t['f.company']}</label><input id="b-company" type="text" name="company" required /></div>
+        <div class="field"><label for="b-email">{t['f.email']}</label><input id="b-email" type="email" name="email" required /></div>
+        <fieldset class="radios">
+          <legend>{flowB.q1.label}</legend>
+          {flowB.q1.options.map((o, i) => (
+            <label class="radio"><input type="radio" name={flowB.q1.name} value={o} required={i === 0} /><span>{o}</span></label>
+          ))}
+        </fieldset>
+        <fieldset class="radios">
+          <legend>{flowB.q2.label}</legend>
+          {flowB.q2.options.map((o, i) => (
+            <label class="radio"><input type="radio" name={flowB.q2.name} value={o} required={i === 0} /><span>{o}</span></label>
+          ))}
+        </fieldset>
+        <div class="field"><label for="b-msg">{t['b.q3']}</label><textarea id="b-msg" name="message" rows="3" placeholder={t['f.open.ph']} required></textarea></div>
+        <button class="btn btn-primary aud-submit" type="submit"><span class="lbl">{t['b.cta']}</span> <span class="arw">→</span></button>
+        <p class="form-err" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <section class="aud-step" data-step="3" hidden>
+      <div class="conf">
+        <div class="conf-check" aria-hidden="true">✓</div>
+        <h2 class="conf-title">{t['conf.title']}</h2>
+        <p class="conf-body">{t['conf.body']}</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<style>
+  .aud { min-height: 100vh; background: var(--ink); color: var(--cream); display: flex; flex-direction: column; }
+  .aud-head { display: flex; align-items: center; justify-content: space-between; padding: 20px var(--pad); border-bottom: 1px solid var(--hair-dark); }
+  .aud-head .brand { color: var(--cream); }
+  .aud-head .lang-link { font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: .05em; color: var(--cream-45); border: 1px solid var(--hair-dark); border-radius: 20px; padding: 6px 14px; transition: color .2s, border-color .2s; }
+  .aud-head .lang-link:hover { color: var(--cream); border-color: var(--cream-70); }
+  .aud-wrap { width: 100%; max-width: 640px; margin: 0 auto; padding: clamp(40px, 8vw, 80px) var(--pad) 80px; flex: 1; }
+  .aud-eyebrow { color: var(--blue); margin-bottom: 16px; }
+  .aud-intro { font-family: var(--serif); font-size: clamp(18px, 2.4vw, 22px); line-height: 1.45; color: var(--cream-70); margin-bottom: clamp(32px, 5vw, 48px); }
+  .aud-h1 { font-size: clamp(28px, 4.5vw, 44px); margin-bottom: 28px; }
+  .path-choices { display: grid; gap: 14px; }
+  .path-choice { text-align: left; background: transparent; color: var(--cream); cursor: pointer; border: 1px solid var(--hair-dark); border-radius: 8px; padding: 26px 26px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 12px; transition: border-color .25s, background .25s, transform .2s; }
+  .path-choice:hover { transform: translateY(-2px); border-color: var(--yellow); background: rgba(254,236,1,.05); }
+  .path-choice.blue:hover { border-color: var(--blue); background: rgba(49,160,255,.07); }
+  .path-choice .pc-title { font-family: var(--serif); font-size: clamp(19px, 2.4vw, 24px); grid-column: 1; }
+  .path-choice .pc-sub { grid-column: 1; font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--cream-45); }
+  .path-choice .pc-arrow { grid-column: 2; grid-row: 1 / span 2; font-size: 22px; color: var(--cream-45); transition: transform .25s, color .25s; }
+  .path-choice:hover .pc-arrow { transform: translateX(4px); color: var(--cream); }
+  .back-btn { background: none; border: 0; color: var(--cream-45); font-family: var(--sans); font-size: 13px; font-weight: 600; cursor: pointer; padding: 4px 0; margin-bottom: 22px; transition: color .2s; }
+  .back-btn:hover { color: var(--cream); }
+  .flow-title { font-size: clamp(24px, 3.4vw, 34px); margin-bottom: 26px; }
+  .aud-form .field { margin-bottom: 18px; }
+  .aud-form .field label { color: var(--cream-70); }
+  .aud-form .field input, .aud-form .field textarea { background: rgba(255,253,235,.04); border-color: var(--hair-dark); color: var(--cream); }
+  .aud-form .field input:focus, .aud-form .field textarea:focus { border-color: var(--cream-70); }
+  .aud-form .field input::placeholder, .aud-form .field textarea::placeholder { color: var(--cream-45); }
+  .radios { border: 0; padding: 0; margin: 0 0 22px; }
+  .radios legend { font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: .04em; color: var(--cream-70); margin-bottom: 12px; padding: 0; }
+  .radio { display: inline-flex; align-items: center; gap: 9px; border: 1px solid var(--hair-dark); border-radius: 6px; padding: 11px 16px; margin: 0 8px 8px 0; cursor: pointer; font-family: var(--sans); font-size: 14px; color: var(--cream-70); transition: border-color .2s, background .2s, color .2s; }
+  .radio input { accent-color: var(--yellow); margin: 0; }
+  .radio:has(input:checked) { border-color: var(--yellow); background: rgba(254,236,1,.06); color: var(--cream); }
+  .radio:hover { border-color: var(--cream-70); }
+  .aud-submit { width: 100%; justify-content: center; margin-top: 8px; }
+  .form-err { color: #ff8a8a; font-family: var(--sans); font-size: 13.5px; margin-top: 14px; }
+  .form-err a { color: #ff8a8a; text-decoration: underline; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .conf { text-align: center; padding: clamp(30px, 6vw, 60px) 0; }
+  .conf-check { width: 64px; height: 64px; border-radius: 50%; background: var(--yellow); color: var(--ink); font-size: 32px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
+  .conf-title { font-size: clamp(26px, 3.6vw, 38px); margin-bottom: 14px; }
+  .conf-body { font-family: var(--serif); font-size: clamp(17px, 2.2vw, 20px); line-height: 1.5; color: var(--cream-70); max-width: 44ch; margin: 0 auto; }
+  [hidden] { display: none !important; }
+</style>
+
+<script define:vars={{ endpoint: SHEET_ENDPOINT, fallbackEmail: FALLBACK_EMAIL, locale: lang, errMsg: t['err'], sendingLabel: t['sending'] }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const steps = {
+      1: document.querySelector('[data-step="1"]'),
+      2: document.querySelector('[data-step="2"]'),
+      3: document.querySelector('[data-step="3"]'),
+    };
+    const forms = { a: document.querySelector('[data-flow="a"]'), b: document.querySelector('[data-flow="b"]') };
+    const showStep = (n) => { Object.values(steps).forEach(s => s.hidden = true); steps[n].hidden = false; window.scrollTo({ top: 0, behavior: 'smooth' }); };
+
+    document.querySelectorAll('.path-choice').forEach(btn => btn.addEventListener('click', () => {
+      const path = btn.dataset.path;
+      forms.a.hidden = path !== 'a';
+      forms.b.hidden = path !== 'b';
+      showStep(2);
+    }));
+    document.querySelector('[data-back]').addEventListener('click', () => showStep(1));
+
+    Object.values(forms).forEach(form => form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errEl = form.querySelector('.form-err');
+      errEl.hidden = true;
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      // honeypot: silently accept bots without sending
+      if (form.querySelector('[name="company_url"]').value) { showStep(3); return; }
+
+      const fd = new FormData(form);
+      fd.delete('company_url');
+      const payload = { locale, audit: form.dataset.audit, path: form.dataset.flow, submittedAt: new Date().toISOString() };
+      fd.forEach((v, k) => { payload[k] = v; });
+
+      const btn = form.querySelector('.aud-submit');
+      const lbl = btn.querySelector('.lbl');
+      const original = lbl.textContent;
+      btn.disabled = true; lbl.textContent = sendingLabel;
+
+      const showError = () => {
+        errEl.innerHTML = errMsg + ' <a href="mailto:' + fallbackEmail + '">' + fallbackEmail + '</a>';
+        errEl.hidden = false;
+        btn.disabled = false; lbl.textContent = original;
+      };
+
+      if (!endpoint) { showError(); return; }
+      try {
+        await fetch(endpoint, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+        showStep(3);
+      } catch (err) {
+        showError();
+      }
+    }));
+  });
+</script>
