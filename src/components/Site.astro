@@ -19,7 +19,7 @@ const stats = {
       { count: 300, lead: 'Más de ', prefix: '$', suffix: 'M', label: t['proof.l3'] },
       { count: 30, lead: 'Más de ', suffix: ' países', label: t['proof.l4'] },
     ],
-    market: { count: 5.5, decimals: 1, prefix: '$', suffix: ' mil millones' },
+    market: { count: 5.5, decimals: 1, prefix: '$', suffix: ' mil millones', sufWord: true },
   },
 }[lang];
 const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
@@ -101,7 +101,7 @@ const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
     </div>
     <div class="stat-row">
       <div class="stat reveal">
-        <div class="n" data-count={stats.market.count} data-decimals={stats.market.decimals || 0} data-prefix={stats.market.prefix || ''} data-suffix={stats.market.suffix || ''}><span>0</span></div>
+        <div class="n" data-count={stats.market.count} data-decimals={stats.market.decimals || 0} data-prefix={stats.market.prefix || ''} data-suffix={stats.market.suffix || ''} data-sufword={stats.market.sufWord ? '1' : ''}><span>0</span></div>
         <div class="d" set:html={t['why.d1']}></div>
       </div>
       <div class="stat reveal">
@@ -136,9 +136,9 @@ const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
           <div class="outside">
             <div class="ext" set:html={t['model.c1ext']}></div>
             <div class="conn" aria-hidden="true"></div>
-            <div class="org" style="flex:1;min-height:auto;padding:18px">
+            <div class="org" style="flex:1;min-height:auto">
               <span class="orglbl" set:html={t['model.orglbl']}></span>
-              <span class="node client" style="margin-top:14px" set:html={t['model.internal']}></span>
+              <span class="node client" set:html={t['model.internal']}></span>
             </div>
           </div>
         </div>
@@ -319,7 +319,12 @@ const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
     const fmt = (v, d) => new Intl.NumberFormat(locale === 'es' ? 'es-EC' : 'en-US', { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
     const paint = (el, val) => {
       const p = el.dataset;
-      el.innerHTML = (p.lead ? '<span class="lead-in">' + p.lead + '</span>' : '') + (p.prefix ? '<span class="pre">' + p.prefix + '</span>' : '') + '<span class="val">' + val + '</span>' + (p.suffix ? '<span class="suf">' + p.suffix + '</span>' : '');
+      el.innerHTML = (p.lead ? '<span class="lead-in">' + p.lead + '</span>' : '')
+        + '<span class="num-line">'
+        + (p.prefix ? '<span class="pre">' + p.prefix + '</span>' : '')
+        + '<span class="val">' + val + '</span>'
+        + (p.suffix ? '<span class="suf' + (p.sufword ? ' word' : '') + '">' + p.suffix + '</span>' : '')
+        + '</span>';
     };
     const animate = (el) => {
       const target = parseFloat(el.dataset.count), dec = parseInt(el.dataset.decimals || '0', 10), dur = 1400, start = performance.now();

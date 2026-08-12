@@ -105,8 +105,16 @@
   .proof-strip{position:relative;margin-top:clamp(56px,8vw,96px);border-top:1px solid var(--hair-dark);display:grid;grid-template-columns:repeat(4,1fr)}
   .proof-strip .cell{padding:34px 0 40px;border-right:1px solid var(--hair-dark)}
   .proof-strip .cell:last-child{border-right:0}
-  .proof-num{font-family:var(--serif);font-size:clamp(30px,4vw,48px);line-height:1;font-weight:500;color:var(--cream)}
+  .proof-num{font-family:var(--serif);font-size:clamp(30px,4vw,48px);line-height:1;font-weight:500;color:var(--cream);display:flex;flex-direction:column;justify-content:flex-end}
+  /* Only where a .lead-in eyebrow ("Más de") is actually used does every number reserve
+     a slot for one — that keeps the labels below aligned across all four cells without
+     adding dead space to languages that have no lead. */
+  .proof-strip:has(.lead-in) .proof-num{min-height:calc(1em + 18px)}
   .proof-num .pre,.proof-num .suf{color:var(--yellow)}
+  .lead-in{font-family:var(--sans);font-size:11px;line-height:1;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--cream-45);margin-bottom:7px}
+  .num-line{display:block;white-space:nowrap}
+  /* Multi-word suffixes (" mil millones") ride at label scale so the numeral stays the hero. */
+  .suf.word{font-size:.4em;letter-spacing:.01em}
   .proof-label{font-family:var(--sans);font-size:12px;color:var(--cream-45);letter-spacing:.03em;margin-top:12px;max-width:24ch}
   @media(max-width:720px){
     .proof-strip{grid-template-columns:1fr 1fr}
@@ -164,7 +172,9 @@
   .mcard h3{font-size:24px}
   .mcard .mdesc{font-size:14px;color:var(--ink-70);margin-top:8px;max-width:34ch}
   .stage{margin-top:26px}
-  .org{border:1px dashed var(--ink-45);border-radius:6px;padding:20px;position:relative;min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+  /* Top padding clears the absolutely-positioned .orglbl — without it, a tall stack
+     of nodes centres itself straight through the label. */
+  .org{border:1px dashed var(--ink-45);border-radius:6px;padding:34px 20px 20px;position:relative;min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:12px}
   .org .orglbl{position:absolute;top:10px;left:14px;font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-45);font-weight:600}
   .node{font-family:var(--sans);font-size:12px;font-weight:600;padding:9px 14px;border-radius:4px;display:inline-flex;align-items:center;gap:8px;width:fit-content}
   .node.client{background:var(--cream);color:var(--ink-70);border:1px solid var(--hair-light)}
