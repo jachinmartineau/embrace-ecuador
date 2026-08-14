@@ -118,7 +118,7 @@
   .proof-label{font-family:var(--sans);font-size:12px;color:var(--cream-45);letter-spacing:.03em;margin-top:12px;max-width:24ch}
   @media(max-width:720px){
     .proof-strip{grid-template-columns:1fr 1fr}
-    .proof-strip .cell{border-bottom:1px solid var(--hair-dark);padding:26px 0 28px}
+    .proof-strip .cell{border-bottom:1px solid var(--hair-dark);padding:42px 0 30px}
     .proof-strip .cell:nth-child(2n){border-right:0}
   }
 

@@ -4,4 +4,4 @@
 export const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxdUEl2sWm91_gVbMdgfUHciY4s4OwIxvknfGgtFHl3KHRjIGoiJHf9WLxbqG6sf7EmJA/exec';
 
 // Fallback contact email shown if a submission can't be sent.
-export const FALLBACK_EMAIL = 'hola@embraceecuador.com';
+export const FALLBACK_EMAIL = 'support@embraceecommerce.com';
