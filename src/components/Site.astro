@@ -1,7 +1,12 @@
 ---
 import { ui } from '../i18n/ui.js';
+import { auditUi } from '../i18n/audit.js';
+import { SHEET_ENDPOINT, FALLBACK_EMAIL } from '../config.js';
 const { lang } = Astro.props;
 const t = ui[lang];
+// The contact form reuses the audit form's already-translated status strings
+// (sending / confirmation / error) rather than introducing new copy.
+const at = auditUi[lang];
 const stats = {
   en: {
     proof: [
@@ -254,26 +259,32 @@ const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
         </div>
       </div>
       <div class="reveal">
-        <form class="lead-form" onsubmit="return false;">
+        <form class="lead-form" novalidate>
+          <div class="hp" aria-hidden="true"><label>Leave this field empty<input type="text" name="company_url" tabindex="-1" autocomplete="off" /></label></div>
           <div class="two">
-            <div class="field"><label for="name" set:html={t['form.name']}></label><input id="name" type="text" placeholder={t['form.ph.name']} /></div>
-            <div class="field"><label for="company" set:html={t['form.company']}></label><input id="company" type="text" placeholder={t['form.ph.company']} /></div>
+            <div class="field"><label for="name" set:html={t['form.name']}></label><input id="name" name="name" type="text" placeholder={t['form.ph.name']} required /></div>
+            <div class="field"><label for="company" set:html={t['form.company']}></label><input id="company" name="company" type="text" placeholder={t['form.ph.company']} required /></div>
           </div>
           <div class="two">
-            <div class="field"><label for="email" set:html={t['form.email']}></label><input id="email" type="email" placeholder={t['form.ph.email']} /></div>
+            <div class="field"><label for="email" set:html={t['form.email']}></label><input id="email" name="email" type="email" placeholder={t['form.ph.email']} required /></div>
             <div class="field">
               <label for="audit" set:html={t['form.audit']}></label>
-              <select id="audit">
+              <select id="audit" name="audit">
                 <option set:html={t['form.opt1']}></option>
                 <option set:html={t['form.opt2']}></option>
                 <option set:html={t['form.opt3']}></option>
               </select>
             </div>
           </div>
-          <div class="field"><label for="msg" set:html={t['form.msg']}></label><textarea id="msg" rows="3" placeholder={t['form.ph.msg']}></textarea></div>
-          <button class="btn btn-primary" type="submit" style="justify-content:center"><span set:html={t['form.submit']}></span> <span class="arw">→</span></button>
-          <p class="form-note" set:html={t['form.note']}></p>
+          <div class="field"><label for="msg" set:html={t['form.msg']}></label><textarea id="msg" name="message" rows="3" placeholder={t['form.ph.msg']}></textarea></div>
+          <button class="btn btn-primary lead-submit" type="submit" style="justify-content:center"><span class="lbl" set:html={t['form.submit']}></span> <span class="arw">→</span></button>
+          <p class="form-err" role="alert" hidden></p>
         </form>
+        <div class="lead-conf" hidden>
+          <div class="conf-check" aria-hidden="true">✓</div>
+          <h3 class="conf-title">{at['conf.title']}</h3>
+          <p class="conf-body">{at['conf.body']}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -357,5 +368,55 @@ const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
       document.querySelectorAll('.sel-opt').forEach(x => { x.classList.remove('active'); x.setAttribute('aria-pressed', 'false'); });
       b.classList.add('active'); b.setAttribute('aria-pressed', 'true'); show(b.dataset.target);
     }));
+  });
+</script>
+
+<script define:vars={{ endpoint: SHEET_ENDPOINT, fallbackEmail: FALLBACK_EMAIL, locale: lang, errMsg: at['err'], sendingLabel: at['sending'] }}>
+  // Mirrors the submit flow in AuditForm.astro so both forms land in the same Sheet.
+  // Only locale/audit/name/company/email/message are sent; the audit form's extra
+  // columns stay blank for these rows, which is what distinguishes them.
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form.lead-form');
+    if (!form) return;
+    const conf = document.querySelector('.lead-conf');
+    const errEl = form.querySelector('.form-err');
+    const btn = form.querySelector('.lead-submit');
+    const lbl = btn.querySelector('.lbl');
+
+    const showConfirmation = () => {
+      form.hidden = true;
+      conf.hidden = false;
+      conf.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errEl.hidden = true;
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      // honeypot: silently accept bots without sending
+      if (form.querySelector('[name="company_url"]').value) { showConfirmation(); return; }
+
+      const fd = new FormData(form);
+      fd.delete('company_url');
+      const payload = { locale, submittedAt: new Date().toISOString() };
+      fd.forEach((v, k) => { payload[k] = v; });
+
+      const original = lbl.textContent;
+      btn.disabled = true; lbl.textContent = sendingLabel;
+
+      const showError = () => {
+        errEl.innerHTML = errMsg + ' <a href="mailto:' + fallbackEmail + '">' + fallbackEmail + '</a>';
+        errEl.hidden = false;
+        btn.disabled = false; lbl.textContent = original;
+      };
+
+      if (!endpoint) { showError(); return; }
+      try {
+        await fetch(endpoint, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+        showConfirmation();
+      } catch (err) {
+        showError();
+      }
+    });
   });
 </script>

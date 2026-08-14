@@ -2,8 +2,17 @@
 import '../styles/global.css';
 const { lang, title, description } = Astro.props;
 const base = (Astro.site?.href || 'https://example.com/').replace(/\/$/, '');
-const enUrl = base + '/';
-const esUrl = base + '/es/';
+// EN/ES counterparts, so each page points hreflang at its own translation rather
+// than at the home pages (which would make the audit pages canonicalise away).
+const ROUTES = [
+  { en: '/', es: '/es/' },
+  { en: '/audit/', es: '/es/auditoria/' },
+];
+const norm = (p) => p.replace(/\/+$/, '') || '/';
+const path = norm(Astro.url.pathname);
+const pair = ROUTES.find((r) => norm(r.en) === path || norm(r.es) === path) || ROUTES[0];
+const enUrl = base + pair.en;
+const esUrl = base + pair.es;
 const canonical = lang === 'es' ? esUrl : enUrl;
 ---
 <!DOCTYPE html>
@@ -13,6 +22,7 @@ const canonical = lang === 'es' ? esUrl : enUrl;
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="canonical" href={canonical} />
   <link rel="alternate" hreflang="en" href={enUrl} />
   <link rel="alternate" hreflang="es" href={esUrl} />

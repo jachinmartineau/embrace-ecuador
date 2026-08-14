@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 
-// IMPORTANT: change `site` to your real domain before launch (used for canonical + hreflang tags)
+// `site` drives the canonical + hreflang tags. Must match the domain the site is
+// actually served from — add it in Netlify → Domain management to match.
 export default defineConfig({
-  site: 'https://embrace-ecuador.netlify.app',
+  site: 'https://embrace.ec',
 });
