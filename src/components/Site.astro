@@ -27,6 +27,20 @@ const stats = {
     market: { count: 5.5, decimals: 1, prefix: '$', suffix: ' mil millones', sufWord: true },
   },
 }[lang];
+// Logo wall. Heights are per-logo so wordmarks and stacked/icon lockups carry
+// similar optical weight in the row; --logo-h feeds the CSS, which scales them
+// down together on small screens.
+const brands = [
+  { name: 'Revlon',       src: '/logos/revlon.svg',       h: 24 },
+  { name: 'Starbucks',    src: '/logos/starbucks.png',    h: 40 },
+  { name: 'PepsiCo',      src: '/logos/pepsico.png',      h: 42 },
+  { name: 'Kate Spade',   src: '/logos/kate-spade.svg',   h: 30 },
+  { name: 'Lenox',        src: '/logos/lenox.png',        h: 38 },
+  { name: 'Pyrex',        src: '/logos/pyrex.png',        h: 22 },
+  { name: 'bareMinerals', src: '/logos/bareminerals.png', h: 18 },
+  { name: 'Oneida',       src: '/logos/oneida.png',       h: 20 },
+];
+
 const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
 ---
 <header>
@@ -205,7 +219,9 @@ const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
       <div class="brands">
         <p class="cap" set:html={t['brands.cap']}></p>
         <div class="marks">
-          <span>Revlon</span><span>Starbucks</span><span>PepsiCo</span><span>Kate&nbsp;Spade</span><span>Lenox</span><span>Pyrex</span><span>bareMinerals</span>
+          {brands.map((b) => (
+            <img src={b.src} alt={b.name} loading="lazy" decoding="async" style={`--logo-h:${b.h}px`} />
+          ))}
         </div>
       </div>
     </div>

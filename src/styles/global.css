@@ -183,6 +183,13 @@
   .outside{display:flex;align-items:center;gap:14px}
   .outside .ext{flex:0 0 auto;background:var(--cream);border:1px solid var(--hair-light);border-radius:4px;padding:9px 14px;font-family:var(--sans);font-size:12px;font-weight:600;color:var(--ink-70)}
   .outside .conn{flex:1;height:1px;background:repeating-linear-gradient(90deg,var(--ink-45) 0 6px,transparent 6px 12px)}
+  /* Stacked on narrow screens. Side-by-side squeezes the org box to ~115px, which
+     wraps its "YOUR BUSINESS" label onto two lines and back over the node below. */
+  @media(max-width:560px){
+    .outside{flex-direction:column;align-items:stretch;gap:12px}
+    .outside .ext{align-self:flex-start}
+    .outside .conn{flex:0 0 auto;width:1px;height:20px;align-self:center;background:repeating-linear-gradient(180deg,var(--ink-45) 0 6px,transparent 6px 12px)}
+  }
 
   /* the "outside" card stays light and muted */
   .mcard.usual{background:var(--cream);opacity:.96}
@@ -224,9 +231,20 @@
   .cred-list .row .l{font-family:var(--sans);font-size:13px;color:var(--ink-70);text-align:right;max-width:26ch}
   .brands{margin-top:clamp(48px,6vw,72px);border-top:1px solid var(--hair-light);padding-top:34px}
   .brands .cap{font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-45);font-weight:600;margin-bottom:22px}
-  .brands .marks{display:flex;flex-wrap:wrap;gap:14px 34px;align-items:center}
-  .brands .marks span{font-family:var(--serif);font-size:clamp(20px,2.6vw,28px);color:var(--ink);opacity:.62;transition:opacity .25s}
-  .brands .marks span:hover{opacity:1}
+  .brands .marks{display:flex;flex-wrap:wrap;gap:22px 38px;align-items:center;--logo-scale:1}
+  @media(max-width:560px){.brands .marks{--logo-scale:.82;gap:18px 26px}}
+  /* Logos sit on --cream-dim. Several source files have an opaque white box
+     (JPEG / palette PNG with no alpha); multiply drops it against the panel
+     without touching the artwork. Muted by default, full colour on hover, to
+     match the restraint of the wordmarks these replaced. */
+  .brands .marks img{
+    height:calc(var(--logo-h,28px) * var(--logo-scale));
+    width:auto;max-width:none;object-fit:contain;
+    mix-blend-mode:multiply;filter:grayscale(1);opacity:.62;
+    transition:opacity .25s, filter .25s;
+  }
+  .brands .marks img:hover{filter:grayscale(0);opacity:1}
+  @media(prefers-reduced-motion:reduce){.brands .marks img{transition:none}}
 
   /* selector */
   .selector{background:var(--ink);color:var(--cream)}
