@@ -166,12 +166,15 @@
   .model .sec-head{margin-bottom:0}
   .model-diagram{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:clamp(40px,5vw,56px)}
   @media(max-width:820px){.model-diagram{grid-template-columns:1fr}}
-  .mcard{border:1px solid var(--hair-light);border-radius:6px;padding:clamp(24px,3vw,34px);position:relative;overflow:hidden}
+  .mcard{border:1px solid var(--hair-light);border-radius:6px;padding:clamp(24px,3vw,34px);position:relative;overflow:hidden;display:flex;flex-direction:column}
   .mcard .mtitle{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
   .mcard .mtitle .k{font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--ink-45)}
   .mcard h3{font-size:24px}
   .mcard .mdesc{font-size:14px;color:var(--ink-70);margin-top:8px;max-width:34ch}
-  .stage{margin-top:26px}
+  /* The stage fills whatever height the taller card sets, so both dashed org
+     boxes come out the same size instead of the one-node card trailing dead space. */
+  .stage{margin-top:26px;flex:1;display:flex;flex-direction:column}
+  .stage > .org{flex:1}
   /* Top padding clears the absolutely-positioned .orglbl — without it, a tall stack
      of nodes centres itself straight through the label. */
   .org{border:1px dashed var(--ink-45);border-radius:6px;padding:34px 20px 20px;position:relative;min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:12px}
@@ -180,14 +183,15 @@
   .node.client{background:var(--cream);color:var(--ink-70);border:1px solid var(--hair-light)}
   .node.op{background:var(--ink);color:var(--cream)}
   .node.op i{width:7px;height:7px;border-radius:50%;background:var(--yellow);font-style:normal;flex:0 0 auto}
-  .outside{display:flex;align-items:center;gap:14px}
+  .outside{display:flex;align-items:center;gap:14px;flex:1}
+  .outside .org{align-self:stretch}
   .outside .ext{flex:0 0 auto;background:var(--cream);border:1px solid var(--hair-light);border-radius:4px;padding:9px 14px;font-family:var(--sans);font-size:12px;font-weight:600;color:var(--ink-70)}
   .outside .conn{flex:1;height:1px;background:repeating-linear-gradient(90deg,var(--ink-45) 0 6px,transparent 6px 12px)}
   /* Stacked on narrow screens. Side-by-side squeezes the org box to ~115px, which
      wraps its "YOUR BUSINESS" label onto two lines and back over the node below. */
   @media(max-width:560px){
     .outside{flex-direction:column;align-items:stretch;gap:12px}
-    .outside .ext{align-self:flex-start}
+    .outside .ext{align-self:stretch}
     .outside .conn{flex:0 0 auto;width:1px;height:20px;align-self:center;background:repeating-linear-gradient(180deg,var(--ink-45) 0 6px,transparent 6px 12px)}
   }
 
