@@ -376,11 +376,15 @@ const steps = ['i.', 'ii.', 'iii.'];
     } else {
       const ro = new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); o.unobserve(e.target); } }), { threshold: .14, rootMargin: '0px 0px -8% 0px' });
       reveals.forEach(e => ro.observe(e));
-      const co = new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { animate(e.target); o.unobserve(e.target); } }), { threshold: .5 });
-      // Only figures still below the fold get zeroed and counted up. Anything already
-      // on screen keeps the value the server rendered, so it never flashes to 0 first.
+      // Figures already carry their real value from the server. Only ones far enough
+      // below the fold get zeroed and counted up, and the observer is given the same
+      // lead margin, so that reset happens off-screen rather than as a visible flash.
+      // Anything at or near the fold — the hero strip on a phone — simply keeps its
+      // rendered value, which is the point: a correct number beats an animated one.
+      const LEAD = 260;
+      const co = new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { animate(e.target); o.unobserve(e.target); } }), { rootMargin: LEAD + 'px 0px', threshold: 0 });
       counters.forEach(el => {
-        if (el.getBoundingClientRect().top > innerHeight) {
+        if (el.getBoundingClientRect().top > innerHeight + LEAD) {
           paint(el, fmt(0, parseInt(el.dataset.decimals || '0', 10)));
           co.observe(el);
         }
