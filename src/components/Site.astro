@@ -41,7 +41,20 @@ const brands = [
   { name: 'Oneida',       src: '/logos/oneida.png',       h: 20 },
 ];
 
-const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
+
+// Figures are rendered with their real value at build time rather than a literal
+// "0", so they are correct before any JS runs — previously they sat at 0 until the
+// bundle booted AND the element was half-visible, which is what read as "slow to load".
+const nf = (v, d) => new Intl.NumberFormat(lang === 'es' ? 'es-EC' : 'en-US', { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
+const numHtml = (o) =>
+  (o.lead ? `<span class="lead-in">${o.lead}</span>` : '') +
+  '<span class="num-line">' +
+  (o.prefix ? `<span class="pre">${o.prefix}</span>` : '') +
+  `<span class="val">${nf(o.count, o.decimals || 0)}</span>` +
+  (o.suffix ? `<span class="suf${o.sufWord ? ' word' : ''}">${o.suffix}</span>` : '') +
+  '</span>';
+
+const steps = ['i.', 'ii.', 'iii.'];
 ---
 <header>
   <div class="wrap navbar">
@@ -76,7 +89,7 @@ const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
     <div class="proof-strip">
       {stats.proof.map((s) => (
         <div class="cell reveal">
-          <div class="proof-num" data-count={s.count} data-decimals={s.decimals || 0} data-lead={s.lead || ''} data-prefix={s.prefix || ''} data-suffix={s.suffix || ''}><span>0</span></div>
+          <div class="proof-num" data-count={s.count} data-decimals={s.decimals || 0} data-lead={s.lead || ''} data-prefix={s.prefix || ''} data-suffix={s.suffix || ""} set:html={numHtml(s)}></div>
           <div class="proof-label" set:html={s.label}></div>
         </div>
       ))}
@@ -120,15 +133,15 @@ const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
     </div>
     <div class="stat-row">
       <div class="stat reveal">
-        <div class="n" data-count={stats.market.count} data-decimals={stats.market.decimals || 0} data-prefix={stats.market.prefix || ''} data-suffix={stats.market.suffix || ''} data-sufword={stats.market.sufWord ? '1' : ''}><span>0</span></div>
+        <div class="n" data-count={stats.market.count} data-decimals={stats.market.decimals || 0} data-prefix={stats.market.prefix || ''} data-suffix={stats.market.suffix || ''} data-sufword={stats.market.sufWord ? '1' : ''} set:html={numHtml(stats.market)}></div>
         <div class="d" set:html={t['why.d1']}></div>
       </div>
       <div class="stat reveal">
-        <div class="n" data-count={22} data-suffix="%"><span>0</span></div>
+        <div class="n" data-count={22} data-suffix="%" set:html={numHtml({ count: 22, suffix: "%" })}></div>
         <div class="d" set:html={t['why.d2']}></div>
       </div>
       <div class="stat reveal">
-        <div class="n" data-count={94} data-suffix="%"><span>0</span></div>
+        <div class="n" data-count={94} data-suffix="%" set:html={numHtml({ count: 94, suffix: "%" })}></div>
         <div class="d" set:html={t['why.d3']}></div>
       </div>
     </div>
@@ -203,19 +216,13 @@ const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
       <p class="eyebrow" set:html={t['who.eyebrow']}></p>
       <h2 set:html={t['who.h2']}></h2>
       <p set:html={t['who.p1']}></p>
+      <p set:html={t['who.p1b']}></p>
       <p set:html={t['who.p2']}></p>
-      <p class="pquote" set:html={t['who.quote']}></p>
-      <p set:html={t['who.p3']}></p>
+      <p set:html={t['who.p2b']}></p>
       <div class="sig">Jay Vintimilla<small set:html={t['who.sigrole']}></small></div>
     </div>
     <div class="reveal">
-      <div class="cred-list">
-        <div class="row"><span class="v" set:html={t['cred.v1']}></span><span class="l" set:html={t['cred.l1']}></span></div>
-        <div class="row"><span class="v" set:html={t['cred.v2']}></span><span class="l" set:html={t['cred.l2']}></span></div>
-        <div class="row"><span class="v" set:html={t['cred.v3']}></span><span class="l" set:html={t['cred.l3']}></span></div>
-        <div class="row"><span class="v" set:html={t['cred.v4']}></span><span class="l" set:html={t['cred.l4']}></span></div>
-        <div class="row"><span class="v" set:html={t['cred.v5']}></span><span class="l" set:html={t['cred.l5']}></span></div>
-      </div>
+      <p class="pquote" set:html={t['who.quote']}></p>
       <div class="brands">
         <p class="cap" set:html={t['brands.cap']}></p>
         <div class="marks">
@@ -365,12 +372,19 @@ const steps = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
     const reveals = document.querySelectorAll('.reveal');
     if (reduce) {
       reveals.forEach(e => e.classList.add('in'));
-      counters.forEach(el => paint(el, fmt(parseFloat(el.dataset.count), parseInt(el.dataset.decimals || '0', 10))));
+      // figures already carry their final value from the server — nothing to paint
     } else {
       const ro = new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); o.unobserve(e.target); } }), { threshold: .14, rootMargin: '0px 0px -8% 0px' });
       reveals.forEach(e => ro.observe(e));
       const co = new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { animate(e.target); o.unobserve(e.target); } }), { threshold: .5 });
-      counters.forEach(el => co.observe(el));
+      // Only figures still below the fold get zeroed and counted up. Anything already
+      // on screen keeps the value the server rendered, so it never flashes to 0 first.
+      counters.forEach(el => {
+        if (el.getBoundingClientRect().top > innerHeight) {
+          paint(el, fmt(0, parseInt(el.dataset.decimals || '0', 10)));
+          co.observe(el);
+        }
+      });
     }
     const box = document.getElementById('sel-result');
     const show = (target) => {
