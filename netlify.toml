@@ -1,3 +1,30 @@
 [build]
   command = "npm run build"
   publish = "dist"
+
+# Spanish is now the site root and English lives under /en/. These preserve the
+# previous URLs, which are already indexed and shared. Most specific first.
+[[redirects]]
+  from = "/es/auditoria/"
+  to = "/auditoria/"
+  status = 301
+
+[[redirects]]
+  from = "/es/auditoria"
+  to = "/auditoria/"
+  status = 301
+
+[[redirects]]
+  from = "/audit/"
+  to = "/en/audit/"
+  status = 301
+
+[[redirects]]
+  from = "/audit"
+  to = "/en/audit/"
+  status = 301
+
+[[redirects]]
+  from = "/es/*"
+  to = "/"
+  status = 301

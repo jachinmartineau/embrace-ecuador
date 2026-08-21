@@ -1,6 +1,6 @@
 # Embrace Ecuador — Astro site
 
-Bilingual (EN / ES) marketing site. English renders at `/`, Spanish at `/es/` —
+Bilingual (ES / EN) marketing site. Spanish renders at `/`, English at `/en/` —
 two real pages with proper `hreflang` + canonical tags, so both languages are
 indexable by Google (unlike a client-side language toggle).
 

@@ -2,9 +2,9 @@
 import Base from '../layouts/Base.astro';
 import AuditForm from '../components/AuditForm.astro';
 import { auditUi } from '../i18n/audit.js';
-const lang = 'en';
+const lang = 'es';
 const t = auditUi[lang];
 ---
 <Base lang={lang} title={t['pageTitle']} description={t['metaDesc']}>
-  <AuditForm lang={lang} otherHref="/es/auditoria/" />
+  <AuditForm lang={lang} otherHref="/en/audit/" />
 </Base>

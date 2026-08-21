@@ -5,8 +5,8 @@ const base = (Astro.site?.href || 'https://example.com/').replace(/\/$/, '');
 // EN/ES counterparts, so each page points hreflang at its own translation rather
 // than at the home pages (which would make the audit pages canonicalise away).
 const ROUTES = [
-  { en: '/', es: '/es/' },
-  { en: '/audit/', es: '/es/auditoria/' },
+  { es: '/', en: '/en/' },
+  { es: '/auditoria/', en: '/en/audit/' },
 ];
 const norm = (p) => p.replace(/\/+$/, '') || '/';
 const path = norm(Astro.url.pathname);
@@ -26,7 +26,7 @@ const canonical = lang === 'es' ? esUrl : enUrl;
   <link rel="canonical" href={canonical} />
   <link rel="alternate" hreflang="en" href={enUrl} />
   <link rel="alternate" hreflang="es" href={esUrl} />
-  <link rel="alternate" hreflang="x-default" href={enUrl} />
+  <link rel="alternate" hreflang="x-default" href={esUrl} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />

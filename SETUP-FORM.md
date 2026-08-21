@@ -1,6 +1,6 @@
 # Connecting the audit form to a Google Sheet (~5 minutes, one time)
 
-The form at `/audit` and `/es/auditoria` posts submissions straight into a
+The form at `/auditoria` and `/en/audit` posts submissions straight into a
 Google Sheet through a small Google Apps Script. You do this once.
 
 1. Create a new Google Sheet (sheets.new). Name it e.g. "Embrace Ecuador — Leads".

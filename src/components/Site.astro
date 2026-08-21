@@ -58,7 +58,7 @@ const steps = ['i.', 'ii.', 'iii.'];
 ---
 <header>
   <div class="wrap navbar">
-    <a class="brand" href="/"><span class="dot"></span>Embrace <small>Ecuador</small></a>
+    <a class="brand" href={lang === 'es' ? '/' : '/en/'}><span class="dot"></span>Embrace <small>Ecuador</small></a>
     <div class="nav-right">
       <nav class="links">
         <a href="#services" set:html={t['nav.services']}></a>
@@ -69,8 +69,8 @@ const steps = ['i.', 'ii.', 'iii.'];
         <a class="btn btn-primary nav-cta" href="#contact" set:html={t['nav.cta']}></a>
       </nav>
       <div class="lang" role="group" aria-label="Language">
-        <a class={'lang-btn' + (lang === 'en' ? ' active' : '')} href="/">EN</a>
-        <a class={'lang-btn' + (lang === 'es' ? ' active' : '')} href="/es/">ES</a>
+        <a class={'lang-btn' + (lang === 'en' ? ' active' : '')} href="/en/">EN</a>
+        <a class={'lang-btn' + (lang === 'es' ? ' active' : '')} href="/">ES</a>
       </div>
     </div>
   </div>
